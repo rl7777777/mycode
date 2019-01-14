@@ -30,12 +30,13 @@ def get_mem(name):
                 print mem
 
 def get_cpu(name):
-    for pid in psutil.pids():
-        p = psutil.Process(pid)    
-        if p.exe().split('/')[-1] == 'node' and 'data' in p.name():    
-            if p.cwd().split('/')[-1] == name:
-                cpu_p = p.cpu_percent()
-                print cpu_p
+    for proc in psutil.process_iter(attrs=['name','cwd','exe','pid']):
+        p = proc.info
+        if p['exe'].split('/')[-1] == 'node' and 'data' in p['name']:
+            if p['cwd'].split('/')[-1] == name:
+                cp = subprocess.Popen("ps aux | grep %s| grep -v grep | awk '{print $3}'" % (p['pid']) ,shell=True,stdout = subprocess.PIPE)
+                out = cp.communicate()
+                print out[0].strip('\n')
 
 
 if len(sys.argv) == 1:        #不加参数输出进程名
