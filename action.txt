@@ -1,0 +1,16 @@
+
+<font color=#FF0000 size=6 face="黑体">事故等级: {TRIGGER.SEVERITY} </font>        
+> ##### **发生时间**:  {EVENT.DATE} {EVENT.TIME}      
+> ##### **机器**: {HOST.NAME} - {HOST.IP}      
+> **问题**: {TRIGGER.NAME}      
+> **报警值**: {ITEM.VALUE}
+> **故障已持续**: {EVENT.AGE}
+
+
+
+<font color=#000000 size=6 face="黑体">故障恢复 </font>   
+>  **状态**: {TRIGGER.STATUS}        
+>  **机器**: {HOST.NAME} - {HOST.IP}    
+>  **恢复时间**: {EVENT.RECOVERY.DATE} {EVENT.RECOVERY.TIME}          
+>  **问题**: {TRIGGER.NAME}    
+>  **报警值**: {ITEM.VALUE}
