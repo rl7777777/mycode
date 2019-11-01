@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf8 -*-
 #edit by jackren
 # python>2.7  root
 import psutil
