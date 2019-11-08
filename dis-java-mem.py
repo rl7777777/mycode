@@ -12,27 +12,23 @@ import os
 
 def get_list():
     try:
-        list = []
+        data = []
         name = []
-        zabbix_json = {}
         a = psutil.pids()
         for i in a:
             p = psutil.Process(i)
             if p.name() == 'java':
-               dd_name=p.cmdline()[-1].split('/')[-1]
-               #print dd_name
-               dic = {}
-               dic['{#JAVA_NAME}'] = dd_name
-               list.append(dic)
-        zabbix_json['data'] = list
-        data = json.dumps(zabbix_json,indent = 4,sort_keys = True,separators = (',',':')) 
-        print data
+                if '-jar' in p.cmdline():      #java进程list数组中包含 -jar 执行
+                    name.append(p.cmdline()[p.cmdline().index('-jar')+1])     #cmdline数组-jar下标值后一位     
+        for i in name:
+            data.append({'{#JAVA_NAME}': i})
+        print json.dumps({'data': data}, indent=2)
     except Exception,e:
         print e
 
 
 def get_mem(name):
-    mem = subprocess.Popen("ps aux | grep %s| grep -v grep |grep -v python| awk '{print $6}'" %name,shell=True,stdout = subprocess.PIPE)
+    mem = subprocess.Popen("ps aux | grep %s| grep -v grep |grep -v python|grep -v JVM_OPTS| awk '{print $6}'" %name,shell=True,stdout = subprocess.PIPE)
     #tmp = os.popen("ps aux|grep %s|grep -v grep|grep -v python|awk '{print$11}'" %name).readlines()
     out = mem.communicate()[0].strip('\n')
     print out
@@ -53,6 +49,3 @@ elif sys.argv[1] == 'mem':
 
 else:
     print "Usage:ERROR"
-    
-#UserParameter=java.name, /etc/zabbix/scripts/disco.py 
-#UserParameter=java.mem[*], /etc/zabbix/scripts/disco.py mem $1
