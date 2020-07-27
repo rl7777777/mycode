@@ -1,0 +1,28 @@
+#!/usr/bin/python
+# -*- coding: utf8 -*-
+#edit by jackren
+# python>2.7  root
+import json
+import subprocess
+import sys
+
+def get_list():
+    try:
+        data = []
+        mem = subprocess.Popen("ls /data/wallet/*/logs/*.log 2>/dev/null",shell=True,stdout = subprocess.PIPE)
+        a = mem.communicate()[0].strip('\n')
+        name =a.split('\n')
+        for i in name:
+            data.append({'{#JAVA_NAME}': i})
+        print json.dumps({'data': data}, indent=2)
+    except Exception,e:
+        print e
+
+
+if len(sys.argv) == 1:        #不加参数输出进程名
+    try:
+        get_list()
+    except Exception,e:
+        print 'something wrong\n',e  
+else:
+    print "Usage:ERROR"
